@@ -22,14 +22,6 @@ import java.util.function.Function;
 import static com.example.contactapi.constant.Constant.PHOTO_DIRECTORY;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
-/**
- * @author Junior RT
- * @version 1.0
- * @license Get Arrays, LLC (<a href="https://www.getarrays.io">Get Arrays, LLC</a>)
- * @email getarrayz@gmail.com
- * @since 11/22/2023
- */
-
 @Service
 @Slf4j
 @Transactional(rollbackOn = Exception.class)
@@ -78,6 +70,15 @@ public class ContactService {
             throw new RuntimeException("Unable to save image");
         }
     };
+
+    public void delete(String id) {
+        boolean exists = contactRepo.existsById(id);
+        if (!exists) {
+            throw new IllegalStateException("Contact does not exist");
+        }
+        contactRepo.deleteById(id);
+    }
+
 }
 
 

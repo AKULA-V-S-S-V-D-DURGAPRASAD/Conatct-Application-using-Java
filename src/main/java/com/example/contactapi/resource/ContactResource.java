@@ -26,7 +26,6 @@ public class ContactResource {
 
     @PostMapping
     public ResponseEntity<Contact> createContact(@RequestBody Contact contact) {
-        //return ResponseEntity.ok().body(contactService.createContact(contact));
         return ResponseEntity.created(URI.create("/contacts/userID")).body(contactService.createContact(contact));
     }
 
@@ -42,14 +41,18 @@ public class ContactResource {
     }
 
     @PutMapping("/photo")
-    public ResponseEntity<String> uploadPhoto(@RequestParam("id") String id, @RequestParam("file")MultipartFile file) {
+    public ResponseEntity<String> uploadPhoto(@RequestParam("id") String id, @RequestParam("file") MultipartFile file) {
         return ResponseEntity.ok().body(contactService.uploadPhoto(id, file));
     }
-
-
 
     @GetMapping(path = "/image/{filename}", produces = { IMAGE_PNG_VALUE, IMAGE_JPEG_VALUE })
     public byte[] getPhoto(@PathVariable("filename") String filename) throws IOException {
         return Files.readAllBytes(Paths.get(PHOTO_DIRECTORY + filename));
+    }
+
+    @DeleteMapping("/{contactID}")
+    public ResponseEntity<Void> delete(@PathVariable("contactID") String id) {
+        contactService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }
